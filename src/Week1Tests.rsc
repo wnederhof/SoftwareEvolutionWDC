@@ -28,7 +28,9 @@ void testHasKey() {
 }
 
 void testCalcCodeMap() {
+	print("Testing calcCodeMap...\t\t");
 	// TODO ...
+	println("NOT IMPLEMENTED!");
 }
 
 void testReplByWhiteSpaces() {
@@ -106,4 +108,11 @@ void testWeek1() {
 	testScoreToInt();
 	testCalcLOCDuplications();
 	testAvgScore();
+}
+
+void maintainabilityWeek1() {
+	project = [|rascal://RascalAss1/Week1.rsc|, |rascal://RascalAss1/Week1Tests.rsc|];
+	println("calculating duplications...");
+	duplications = calcLOCDuplications(project);
+	println(duplications);
 }
