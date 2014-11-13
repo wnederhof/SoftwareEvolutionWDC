@@ -14,7 +14,6 @@ import lang::java::jdt::m3::Core;
  * - The metric value (%) and/or score for Duplication deviate
  * - The scores calculated for the maintainability aspects deviate (TODO NEEDS TESTING!!)
  */
-
 str joinStrs(list[str] strs, str joiner) {
 	if (size(strs) == 0) return "";
 	if (size(strs) == 1) return head(strs);
@@ -26,6 +25,7 @@ str ltrim(str s) {return s == ""?"":
 	(((substring(s, 0, 1) == " ")
  || (substring(s, 0, 1) == "\t")) ? ltrim(substring(s, 1)) : s);}
 
+// Yes, I know, the hack here is aweful. Could not find an easier solution in the documentation...
 bool hasKey(m, str key) {
 	try {
 		m[key] = m[key];
@@ -55,7 +55,7 @@ map[str, set[tuple[str, int]]] calcCodeMap(loc l, map[str, set[tuple[str, int]]]
 
 
 /** This function replaces s from offset to offset+length with whitespaces. */
-private str replByWhiteSpaces (str s, int offset, int length) {
+str replByWhiteSpaces (str s, int offset, int length) {
 	str sN = substring (s, 0, offset);
 	for (i <- [0..length])
 		sN += " ";
@@ -154,7 +154,7 @@ str intToScore(num i) {
 
 str avgScore (list[str] scores) {
 	return intToScore(avg([scoreToInt(s) | s <- scores]));
-} 
+}
 
 void main () {
 	project = |project://HelloWorld|;
