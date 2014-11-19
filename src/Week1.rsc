@@ -156,6 +156,28 @@ str avgScore (list[str] scores) {
 	return intToScore(avg([scoreToInt(s) | s <- scores]));
 }
 
+int calcAssertStatements(Statement impl) {
+	assertStatements = 0;
+	visit (classAST) {
+		case \assert(Expression e1):
+			assertStatements += 1;
+		case \assert(Expression e1, Expression e2):
+			assertStatements += 1;
+	}
+	return unitComplexities;
+}
+
+int calcClassAssertStatements(loc methodClass) {
+	Declaration classAST = createAstFromFile(methodClass, true);
+	assertStatements = 0;
+	/* first, let us list all methods. */
+	visit (classAST) {
+		case \method(Type \return, str name, list[Declaration] parameters, list[Expression] exceptions, Statement impl):
+			assertStatements += calcAssertStatements(impl);
+	}
+	return assertStatements;
+}
+
 void main () {
 	project = |project://HelloWorld|;
 	model = createM3FromEclipseProject(project);
@@ -163,16 +185,23 @@ void main () {
 	totalLines = sum([ size(split("\n", readFile(l[0]))) | l <- model@containment, isCompilationUnit(l[0])]);
 	unitLOCs = [ calcBlockSize(l[1], model) | l <- model@declarations, isMethod(l[0])];
 	unitClassCompls = [ calcClassComplexities(l[0]) | l <- model@containment, isCompilationUnit(l[0])];
+	classAssertStmts = [ calcClassAssertStatements(l[0]) | l <- model@containment, isCompilationUnit(l[0])];
+	
+	
 	avgUnitCompl = avg([ avg(ucc) | ucc <- unitClassCompls ]);
 	avgUnitLOCs = avg(unitLOCs);
 	duplications = calcLOCDuplications([l[0] | l <- model@containment, isCompilationUnit(l[0])]);
+	unitTests = calcAssertStatements();
+	unitTestsPct = unitTests / totalLOCs;
 	
 	volScore = metricResult(totalLOCs, 1310, 655, 665, 246);
 	unitComplexityScore = metricResult(avgUnitCompl, 50, 20, 10, 5);
 	unitSizeScore = metricResult(avgUnitLOCs, 100, 50, 20, 10); // TODO THESE SCORES NEED TO BE CHECKED!!
 	duplicationScore = metricResult(duplications/totalLines*100, 20, 10, 5, 3);
+	unitTestingScore = metricResult(1-unitTestsPct,.995,.99,.98,.97,.95);
 	
 	analysability = avgScore([volScore, duplicationScore, unitSizeScore]);
+	stability = unitTestingScore;
 	changeability = avgScore([unitComplexityScore, duplicationScore]);
 	testability = avgScore([unitComplexityScore, unitSizeScore]);
 	maintainability = avgScore([analysability, changeability, testability]);
@@ -182,9 +211,11 @@ void main () {
 		"Volume:\t\t\t<totalLOCs> (<totalLines>)\t\t<volScore>
 		'Avg. Unit Complexity:\t<avgUnitCompl>\t<unitComplexityScore>
 		'Avg. Unit Size:\t\t<avgUnitLOCs>\t\t<unitSizeScore>
+		'Unit Testing:\t\t<unitTestsPct>\t\t<unitTestingScore>
 		'Duplications(%):\t<duplications/totalLines*100>%\t<duplicationScore>
 		'
 		'Analysability:\t\t\t\t<analysability>
+		'Stability:\t\t\t\t<stability>
 		'Changability:\t\t\t\t<changeability>
 		'Testability:\t\t\t\t<testability>
 		'Maintainability:\t\t\t<maintainability>
