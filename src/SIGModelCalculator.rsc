@@ -3,6 +3,7 @@ module SIGModelCalculator
 import metrics::VolumeMetric;
 import metrics::UnitTestingMetric;
 import metrics::DuplicationMetric;
+import tools::MetricScales;
 import Prelude;
 import lang::java::jdt::m3::Core;
 
@@ -17,6 +18,6 @@ public void calculateSigModel(loc project) {
 	//vol = calculateVolume(model);
 	//println("Volume: <vol>");
 	
-	dups = calculateDuplications(model);
-	println("Duplications: <dups>");
+	//dups = calculateDuplications(model);
+	//println("Duplications: <dups>");
 }

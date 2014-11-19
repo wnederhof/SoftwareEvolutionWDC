@@ -9,7 +9,7 @@ import Prelude;
 /**
  * Replace the offset until length by whitespaces.
  */
-private str replaceByWhiteSpaces (str s, int offset, int length) {
+str replaceByWhiteSpaces (str s, int offset, int length) {
 	str sN = substring (s, 0, offset);
 	for (i <- [0..length])
 		sN += " ";
@@ -19,13 +19,19 @@ private str replaceByWhiteSpaces (str s, int offset, int length) {
 /**
  * Calculate the compilation units volumes.
  */
-private int calcCompilationUnitVol(loc l, M3 model) {
+int calcCompilationUnitVol(loc l, M3 model) {
 	str s = readFile(l);
 	set[loc] locs = findDocForCompilationUnit(l, model);
 	for (l2 <- locs) {
 		s = replaceByWhiteSpaces (s, l2.offset, l2.length);
 	}
+	
 	linesOfCode = size([lineOfCode | lineOfCode <- split("\n", s), size(trim(lineOfCode)) != 0]);
+
+	println(l);
+	println(s);
+	println(linesOfCode);
+	
 	return linesOfCode;
 }
 

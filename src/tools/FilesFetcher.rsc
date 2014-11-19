@@ -8,5 +8,6 @@ public set[loc] findCompilationUnits(M3 model) {
 }
 
 public set[loc] findDocForCompilationUnit(loc cu, M3 model) {
+	println(model@documentation);
 	return {l[1] | l <- model@documentation, l[0].path == cu.path || l[1].path == cu.path};
 }
