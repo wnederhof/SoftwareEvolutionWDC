@@ -26,9 +26,6 @@ private int calcCompilationUnitVol(loc l, M3 model) {
 		s = replaceByWhiteSpaces (s, l2.offset, l2.length);
 	}
 	linesOfCode = size([lineOfCode | lineOfCode <- split("\n", s), size(trim(lineOfCode)) != 0]);
-	println("File: <l>");
-	println("LOC : <linesOfCode>");
-	println();
 	return linesOfCode;
 }
 
