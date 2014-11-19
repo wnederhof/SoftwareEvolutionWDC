@@ -7,13 +7,6 @@ import IO;
 import String;
 import metrics::VolumeMetric;
 
-void testReplaceByWhiteSpaces() {
-	print("Testing replByWhiteSpaces...\t");
-	str testStr = "abcdefg";
-	assert(replaceByWhiteSpaces(testStr,1,3) == "a   efg");
-	println("OK!");
-}
-
 void calcCompilationUnitVol(){
 	print("Testing compilation unit volume...\t");
 	

@@ -35,8 +35,21 @@ void testAvgScore() {
 	println("OK!");
 }
 
+
+void testmetricRiskResult(){
+	print("Testing testmetricRiskResult...\t");
+	assert(metricRiskResult(25,0,0) == "++");
+	assert(metricRiskResult(30,5,0) == "+");
+	assert(metricRiskResult(40,10,0) == "o");
+	assert(metricRiskResult(50,15,5) == "-");
+	assert(metricRiskResult(51,16,6) == "--");
+	println("OK!");
+
+}
+
 void testMetricScales() {
 	testMetricResult();
 	testScoreToInt();
 	testAvgScore();
+	testmetricRiskResult();
 }
